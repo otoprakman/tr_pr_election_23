@@ -12,104 +12,57 @@ Election results were disappointment for Kilicdaroglu supporters and Erdogan has
 
 I'll provide some questions and answers by providing some graphs and analysis.
 
+![2023_Turkish_presidential_election_map_first_round](https://github.com/otoprakman/tr_pr_election_23/assets/53580699/43091708-e709-4745-9549-e9cc4a64b2f8)
+![2023_Turkish_presidential_election_map_second_round](https://github.com/otoprakman/tr_pr_election_23/assets/53580699/7e51ec94-c526-492f-8a4e-2b4a0d4ab552)
+*Election results on map [source: Wikipedia]*
+
 ## Testing the call of KK to his supporters to vote.
 
-Question: Is there a significant turnout rate difference in cities where KK get the most of the vote vs RTE?
+**Question-1:** *Is there a significant turnout rate difference in cities where KK get the most of the vote?*
 
-<img src="https://render.githubusercontent.com/render/math?math=Decline\ Ratio = \frac {\sum{Successful\ Authorization\ Attempts}} {\sum{Authorization\ Attempts}}">
+![rte_vs_kk](https://github.com/otoprakman/tr_pr_election_23/assets/53580699/ffefda28-db36-415e-8b7e-39ffa4e774cc)
 
-There are 30 cities where KK was leading in the first round and 51 cities where RTE leading. Here in the plot we compare pct of turnout changes where candidates were leading in the first round. According to the plot above KK's call of vote was not responded well by voters.
+There are 30 cities where KK was leading in the first round and 51 cities where RTE was leading. Here in the plot we compare percentage of turnout changes where candidates were leading in the first round. According to the plot it's clear that turnout rate negatively changed overall, however, cities at where KK was leading in the first round didn't respond well by the call for voting.
 
-![hour_day](https://user-images.githubusercontent.com/53580699/133819745-9ef91e3a-5db1-4817-9680-ebb682580836.png)
+**Question-2:** *How candidates votes changed in percentage?*
 
-Here we observe that there are high decline ratio at early hours in a day. One of the reason could be it is unlikely to transaction happen so it could be seen as suspicious.
+![count_diff](https://github.com/otoprakman/tr_pr_election_23/assets/53580699/9b2021df-000a-4b5a-8da7-ea2428ae339d)
 
-![Rplot](https://user-images.githubusercontent.com/53580699/133821494-7f67ad33-62a5-4cc7-ace4-06b0397f5ca9.png)
+RTE increased his votes all cities except Batman (-%1.19). RTE increased his votes in Igdir (+%20). KK increased his votes most in Kayseri and decreased most in Agri
 
-In this plot, we observe that there is difference between days of a week in terms of the decline ratio. Proportion of transactions for each day are displayed on each point.
+**Question-3:** *How KK nationalist speeches after first round responded by voters, was he able to attract Sinan Ogan(SO) voters?*
 
-![Rplot01](https://user-images.githubusercontent.com/53580699/133825824-c14bc2c0-2b40-49d7-be09-0319b8c33b2a.png)
+![so_diff](https://github.com/otoprakman/tr_pr_election_23/assets/53580699/a2a9b793-6d07-4df7-84a2-66ebd6384e4f)
 
-We wanted to observe if decline ratio is related with the day in a month. For example, most of employees get their wages at 15th or 1st day of the month, therefore there might be a relation between this fact and decline ratio.
+Pearson Correlation Coefficient between KK Diff and SO pct (without Igdir): 0.8306001040759013
 
-### Association Rule Mining
+High correlation indicates KK was successful at getting SO's votes better than RTE in overall.
 
-Association Rule Mining is mainly used for identifying interesting relations between variables. One example is the market basket analysis that discovers which items are more likely bought together. In our problem, we have transaction data and most of variables are categorical. Generating association rules will help us to better understand or reveal hidden patterns for different transactions. Apriori algorithm is used for generating rules and presented below.
+**Closer Look At Nationalist Cities**
 
-![dec_11](https://user-images.githubusercontent.com/53580699/134386579-726da76e-de4b-4ff1-9f21-bd1b440f9e21.png)
+Let's check parliament election results first. We label cities where total nationalist party votes are above %25.
 
-We can observe Confidence values which is the conditional probability of rhs given lhs. For example;
+![nat_so_diff](https://github.com/otoprakman/tr_pr_election_23/assets/53580699/0786c31a-fa18-4103-b25d-aeb7e6fdb11b)
 
-<img src="https://latex.codecogs.com/gif.latex?P\left(Transaction\_Status=Declined&space;\;\middle|\;VAR\_D=50\right)&space;=&space;0.89\" title="P\left(Transaction\_Status=Approved \;\middle|\;VAR\_D=50\right) = 0.89\" />
+Pearson Correlation Coefficient between KK Diff and SO pct: 0.407891970708202
 
-There are many other rules that are not presented in this blog, it is advised to use this method for better understanding relations between variables.
+KK increased his vote in all nationalist cities. It seems nationalist speech was helpful gaining attention of SO votes
 
-## Feature Engineering
+**How about Kurdish votes?**
 
-We can generate new variables using timestamp feature and also changes of variables over time. Here are some features that can be generated;
+We label cities where YSP(Yesiller Sol Parti) votes are above %25.
 
-- Timediff_sec: numeric, time between consecutive transaction in each billing series
-- Time_until_success: numeric, time between the first attempt and the last approved attempt
-- Flag_Vars: binary [0,1] if card information changed in a billing series
-- Response_F: binary [0,1] if Response changed in a billing series
-- Day: integer [0:31] day of transaction
-- Hour: integer [0:24] hour of transaction
-- wDay: integer [0:6] day in a week that transaction happened
+![ysp_so_diff](https://github.com/otoprakman/tr_pr_election_23/assets/53580699/7ec222ec-ac86-4358-9fdc-40884ad8cc2b)
 
-## Modelling
+Pearson Correlation Coeffcient between KK Diff and SO pct: 0.0073420806258775295
 
-In this section, recurring authorization attempts are considered for the modelling. We are going to model the problem with 2 different approaches. One of them is the classification in which Transaction Status(Approved/Declined) is used as a target variable and the approval likelihood will be estimated over next 10 days. The other approach is the regression in which time_until_success will be target variable and it will be forecasted.
-
-### Classification
-
-Random forest is selected as base model because it can handle categorical variables and can generate probability estimates using "ensemble" nature of the method. 
-
-![class1](https://user-images.githubusercontent.com/53580699/134405412-d260cc1d-2f95-4bde-9350-ce37d99616d1.png)
-
-True-Negative is the total number of saved unauthorized attempts. False-Negative is the total number of missed opportunity for authorized attempt.
-Dataset is imbalanced and probability threshold can be analyzed for further analysis.
-
-![class2](https://user-images.githubusercontent.com/53580699/134405622-87fa130b-1cdd-44a8-8997-5c11d62e51bf.png)
-
-We can evaluate our base model in a following way;
-In the plot above each point represents the actual retries and y-axis is the predicted probabilities from our model. There are multiple attempts for some days because some attempts are tried on the same day. If we assume that retry probability threshold is 0.5 then it can be said that 4th, 5th and following attempts that are below 0.5 could be omitted. In other words, 13/23 attempts would be ignored and saved. However 1st, 2nd and other attempts would be retried again redundantly. 
-
-### Regression
-
-In this approach, time to approval is forecasted based on the available variables. Downside of this approach is the difficulty of evaluating the model performance based on the historical data. As the timeline below, model predictions will probably either Predicted-1 or Predicted-2. We don’t know if the Predicted-1 is correct, on the other hand if there is already any retry before that time then we can clearly say that number of declined attempt is reduced. We don’t know if the Predicted-2 is correct as well and We clearly see that time to approval is increased. However number of declined authorization attempt declined.
-
-![reg1](https://user-images.githubusercontent.com/53580699/134407046-82f07e9d-dcd0-4f23-9a1e-fe6584002bc5.png)
-
-In this approach there are two conflicting objectives minimizing total number of attempts and time to approval. Our model's purpose is to identify time to approval and by doing that minimize the redundant authorization attempts. 
-
-![reg2](https://user-images.githubusercontent.com/53580699/134407048-d53bc3b3-fa96-4928-a2f2-bcdbff1791b6.png)
-
-According to the test set and model predictions.
-
-- Total Unique Billing Series: 2150 
-- Predicted-1: 969 (MAE : (-)625942.6 sec) (RMSE: 2283714) (Total Declined Attempts: 683/1737)
-- Predicted-2: 1181 (MAE : (+)10987.86 sec) (RMSE: 26785.41) (Total Declined Attempts: 683/1737)
-
-![reg4](https://user-images.githubusercontent.com/53580699/134419241-430d2d6e-ed14-4061-ac18-cb8afe13719f.png)
-
-As an example, we can't say predicted time is correct, however if we applied this approach we could omit 4 redundant attempts. In our test set 1737 attempt could be ignored and our model's result suggests 683 of them could be saved.
-
-![reg3](https://user-images.githubusercontent.com/53580699/134407051-d9119fa0-5295-4446-90d5-171738fb5fc8.png)
-
-Random forest is an ensemble of multiple decision trees and each trees has its own predictions. Instead averaging decision tree results, we can estimate the probability density function using non-parametric kernel density estimation. First plot above is an example of Predicted-1 and second plot is the example of Predicted-2. 
+RTE performed better than KK in all YSP-leaning cities regardless of SO vote rates. Overall it indicates voters who preferred SO in first round over KK voted KK in second round. However 
 
 ## Conclusion
 
 In this blog post, we introduced one of the common problems in payment analytic and proposed two different approaches. As a future research direction, number of variables can be introduced to the models like, type of merchant, customer profiles, country of the customer, type of the prouct etc. Another methods like multi-armed bandit or more sophisticated tree based algorithms can be used. Sampling bias is a critical problem and should be considered before modelling.
 
 ## Resources
-1) https://medium.com/disney-streaming/building-a-rule-engine-that-helps-to-optimize-recurring-churn-failures-at-scale-in-disney-a6b41bc6614b
-2) https://recurly.com/blog/what-are-recurring-payments-and-subscription-billing/
-3) https://recurly.com/blog/how-data-science-work-reveals-hidden-trends-in-payment-success-rates/
-4) https://recurly.com/blog/the-real-meaning-of-churn/
-5) https://docs.recurly.com/docs/retry-logic
-6) https://stripe.com/en-au/guides/optimizing-authorization-rates
-7) https://www.adyen.com/blog/optimizing-payment-conversion-rates-with-contextual-multi-armed-bandits
-8) https://www.adyen.com/blog/Rescuing-failed-subscription-payments-using-contextual-multi-armed-bandits
-9) https://medium.com/paypal-ai/using-machine-learning-to-improve-payment-authorization-rates-bc3b2cbf4999
+1) https://en.wikipedia.org/wiki/2023_Turkish_presidential_election
+2) https://www.cfr.org/in-brief/heres-how-read-turkeys-election-results-so-far
 
