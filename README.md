@@ -18,17 +18,25 @@ I'll provide some questions and answers by providing some graphs and analysis.
 
 ## Testing the call of KK to his supporters to vote.
 
-**Question-1:** *Is there a significant turnout rate difference in cities where KK get the most of the vote?*
+After the first round Kilicdaroglu asked for voters to vote, how is that request responded by voters?
+
+**Question-1:** *Is there a significant turnout rate difference in cities where KK get the most of the vote in the first round?*
 
 ![rte_vs_kk](https://github.com/otoprakman/tr_pr_election_23/assets/53580699/ffefda28-db36-415e-8b7e-39ffa4e774cc)
 
-There are 30 cities where KK was leading in the first round and 51 cities where RTE was leading. Here in the plot we compare percentage of turnout changes where candidates were leading in the first round. According to the plot it's clear that turnout rate negatively changed overall, however, cities at where KK was leading in the first round didn't respond well by the call for voting.
+There are 30 cities where KK was leading in the first round and 51 cities where RTE was leading. Here in the plot we compare percentage of turnout changes where candidates were leading in the first round. According to the plot it's clear that turnout rate negatively changed overall, however, cities at where KK was leading in the first round didn't respond well his call for voting.
 
-**Question-2:** *How candidates votes changed in percentage?*
+**Question-2:** *How candidates votes changed in percentage between consecutive rounds?*
+
+![image](https://github.com/otoprakman/tr_pr_election_23/assets/53580699/3de16c43-4d6c-4384-aa8e-2cf8c43195fa)
+*(KK-RTE difference of percentage difference between rounds in ascending order-RTE votes increased more than KK)*
+
+![image](https://github.com/otoprakman/tr_pr_election_23/assets/53580699/b3112d6a-3d55-4d46-a714-617883a0eb4b)
+*(KK-RTE difference of percentage difference between rounds in descending order-KK votes increased more than RTE)*
 
 ![count_diff](https://github.com/otoprakman/tr_pr_election_23/assets/53580699/9b2021df-000a-4b5a-8da7-ea2428ae339d)
 
-RTE increased his votes all cities except Batman (-%1.19). RTE increased his votes in Igdir (+%20). KK increased his votes most in Kayseri and decreased most in Agri
+RTE increased his votes at all cities except Batman (-%1.19). Suprisingly, RTE increased his votes in Igdir (+%20). KK votes are decreased in some cities especially most in Agri and increased most in Kayseri.
 
 **Question-3:** *How KK nationalist speeches after first round responded by voters, was he able to attract Sinan Ogan(SO) voters?*
 
@@ -36,11 +44,11 @@ RTE increased his votes all cities except Batman (-%1.19). RTE increased his vot
 
 Pearson Correlation Coefficient between KK Diff and SO pct (without Igdir): 0.8306001040759013
 
-High correlation indicates KK was successful at getting SO's votes better than RTE in overall.
+High correlation indicates KK was successful at getting SO's votes better than RTE in overall. Igdir is an exception, it's the city where RTE increased his votes %20
 
 **Closer Look At Nationalist Cities**
 
-Let's check parliament election results first. We label cities where total nationalist party votes are above %25.
+Let's check parliament election results first. We label cities where total nationalist parties (IYIP and MHP) votes are above %25.
 
 ![nat_so_diff](https://github.com/otoprakman/tr_pr_election_23/assets/53580699/0786c31a-fa18-4103-b25d-aeb7e6fdb11b)
 
@@ -56,11 +64,11 @@ We label cities where YSP(Yesiller Sol Parti) votes are above %25.
 
 Pearson Correlation Coeffcient between KK Diff and SO pct: 0.0073420806258775295
 
-RTE performed better than KK in all YSP-leaning cities regardless of SO vote rates. Overall it indicates voters who preferred SO in first round over KK voted KK in second round. However 
+RTE performed better than KK in all YSP-leaning cities regardless of SO vote rates. Overall it indicates voters who preferred SO in first round over KK voted KK in second round. 
 
 ## Conclusion
 
-In this blog post, we introduced one of the common problems in payment analytic and proposed two different approaches. As a future research direction, number of variables can be introduced to the models like, type of merchant, customer profiles, country of the customer, type of the prouct etc. Another methods like multi-armed bandit or more sophisticated tree based algorithms can be used. Sampling bias is a critical problem and should be considered before modelling.
+Overall, we wanted to have an opinion about whether Kilicdaroglu's strategy after first round was successful or not. 
 
 ## Resources
 1) https://en.wikipedia.org/wiki/2023_Turkish_presidential_election
